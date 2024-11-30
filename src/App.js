@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.jsx
+import { useState } from 'react';
+import StartScreen from './components/StartScreen';
+import QuizScreen from './components/QuizScreen';
+import ResultScreen from './components/ResultScreen';
 
 function App() {
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [points, setPoints] = useState(0);
+  const [hearts, setHearts] = useState(3);
+
+  const handleRestart = () => {
+    setIsQuizStarted(false); // Go back to the StartScreen
+    setPoints(0); // Reset points
+    setHearts(3); // Reset hearts
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen bg-gray-100">
+      {!isQuizStarted ? (
+        <StartScreen onStart={() => setIsQuizStarted(true)} />
+      ) : hearts <= 0 ? (
+        <ResultScreen points={points} onRestart={handleRestart} />
+      ) : (
+        <QuizScreen
+        onRestart={handleRestart}
+          points={points}
+          setPoints={setPoints}
+          hearts={hearts}
+          setHearts={setHearts}
+        />
+      )}
     </div>
   );
 }
